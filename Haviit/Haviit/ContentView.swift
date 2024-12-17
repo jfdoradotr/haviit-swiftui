@@ -38,12 +38,6 @@ struct ContentView: View {
   }
 }
 
-struct AddNewTaskView: View {
-  var body: some View {
-    Text("Hello, World!")
-  }
-}
-
 #Preview {
   ContentView(tasks: [
     Task(name: "Item 1", description: "Description 1", log: []),
