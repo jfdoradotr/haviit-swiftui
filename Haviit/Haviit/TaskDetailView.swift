@@ -17,79 +17,69 @@ struct TaskDetailView: View {
   }
 
   var body: some View {
-    List {
-      Section(header: Text("Description")) {
+    Form {
+      // Description Section
+      Section(header: Text("Task Details").font(.headline)) {
         Text(task.description)
+          .font(.body)
+          .foregroundStyle(.secondary)
       }
 
-      Section(header: Text("Log")) {
+      // Log Section
+      Section(header: Text("Activity Log").font(.headline)) {
         ForEach(task.log, id: \.self) { item in
-          Text(item.formatted(date: .long, time: .shortened))
+          HStack {
+            Text(item.formatted(date: .long, time: .shortened))
+              .font(.subheadline)
+            Spacer()
+            Image(systemName: "checkmark.circle.fill")
+              .foregroundColor(.green)
+          }
+          .padding(.vertical, 4)
         }
       }
 
-      VStack {
-        Button("Mark as completed") {
+      // Action Buttons Section
+      Section {
+        VStack(spacing: 20.0) {
+          Button(action: {
+            // Implement Mark as Completed functionality
+          }) {
+            Text("Mark as Completed")
+              .frame(maxWidth: .infinity)
+              .padding()
+              .background(Color.green)
+              .foregroundColor(.white)
+              .cornerRadius(8)
+          }
 
+          Button(action: {
+            // Implement Edit functionality (perhaps a new view/modal for editing)
+          }) {
+            Text("Edit")
+              .frame(maxWidth: .infinity)
+              .padding()
+              .background(Color.gray.opacity(0.2))
+              .foregroundColor(.primary)
+              .cornerRadius(8)
+          }
+
+          Button(action: {
+            // Implement Delete functionality
+          }) {
+            Text("Delete")
+              .frame(maxWidth: .infinity)
+              .padding()
+              .background(Color.red)
+              .foregroundColor(.white)
+              .cornerRadius(8)
+          }
         }
-        .buttonStyle(.borderedProminent)
-        .tint(.green)
-        .padding(.vertical, 8)
-        .frame(maxWidth: .infinity)
-
-        Button("Edit") {
-
-        }
-        .buttonStyle(.borderedProminent)
-        .tint(.gray)
-        .padding(.vertical, 8)
-        .frame(maxWidth: .infinity)
-
-        Button("Delete") {
-
-        }
-        .buttonStyle(.borderedProminent)
-        .tint(.red)
-        .padding(.vertical, 8)
-        .frame(maxWidth: .infinity)
       }
-
     }
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle(task.name)
-
   }
-
-//  var body: some View {
-//    VStack {
-//      HStack {
-//        VStack(alignment: .leading)  {
-//          Text("Description")
-//            .font(.footnote)
-//            .foregroundStyle(.secondary)
-//          Text(task.description)
-//        }
-//        Spacer()
-//      }
-//      Spacer()
-//      Button("Mark as completed") {
-//
-//      }
-//      .buttonStyle(.borderedProminent)
-//      .tint(.green)
-//      Spacer()
-//    }
-//    .padding()
-//    .navigationBarTitleDisplayMode(.inline)
-//    .navigationTitle(task.name)
-//    .toolbar {
-//      ToolbarItem {
-//        Button("Edit", systemImage: "pencil") {
-//          // move to add task to edit
-//        }
-//      }
-//    }
-//  }
 }
 
 #Preview {
