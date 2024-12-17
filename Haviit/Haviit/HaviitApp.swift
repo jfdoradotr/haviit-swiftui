@@ -8,7 +8,7 @@ import SwiftUI
 struct HaviitApp: App {
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      ContentView(tasks: [])
     }
   }
 }
