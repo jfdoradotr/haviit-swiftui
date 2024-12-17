@@ -5,15 +5,16 @@
 import SwiftUI
 
 struct AddNewTaskView: View {
-  @State private var title: String = ""
+  @State private var name: String = ""
   @State private var description: String = ""
+  let onAddTask: (Task) -> Void
 
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
     NavigationStack {
       Form {
-        TextField("Name", text: $title)
+        TextField("Name", text: $name)
         TextEditor(text: $description)
           .frame(height: 150)
       }
@@ -21,8 +22,8 @@ struct AddNewTaskView: View {
       .toolbar {
         ToolbarItem(placement: .confirmationAction) {
           Button("Add") {
-            print("Title: \(title)")
-            print("Description: \(description)")
+            let task = Task(name: name, description: description)
+            onAddTask(task)
             dismiss()
           }
         }
@@ -38,5 +39,5 @@ struct AddNewTaskView: View {
 }
 
 #Preview {
-  AddNewTaskView()
+  AddNewTaskView(onAddTask: { _ in })
 }
