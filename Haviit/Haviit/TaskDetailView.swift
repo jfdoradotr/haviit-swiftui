@@ -62,22 +62,6 @@ struct TaskDetailView: View {
         .listRowSeparator(.hidden)
 
         Button(action: {
-          print("Edit")
-        }) {
-          HStack {
-            Image(systemName: "pencil")
-            Text("Edit")
-          }
-          .frame(maxWidth: .infinity)
-          .frame(height: 50)
-          .cornerRadius(8)
-        }
-        .tint(.primary)
-        .buttonStyle(.bordered)
-        .listRowBackground(Color.clear)
-        .listRowSeparator(.hidden)
-
-        Button(action: {
           print("Delete")
         }) {
           HStack {
