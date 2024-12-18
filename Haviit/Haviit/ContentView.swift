@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-struct Task: Identifiable {
+struct Task: Identifiable, Hashable {
   let id: UUID
   let name: String
   let description: String
@@ -16,6 +16,8 @@ struct Task: Identifiable {
     self.description = description
     self.log = log
   }
+
+  var sortedLog: [Date] { log.sorted() }
 }
 
 @Observable
@@ -39,7 +41,9 @@ struct ContentView: View {
     NavigationStack {
       List {
         ForEach(tasksStore.tasks) { task in
-          Text(task.name)
+          NavigationLink(value: task) {
+            Text(task.name)
+          }
         }
       }
       .navigationTitle("Haviit")
@@ -54,6 +58,9 @@ struct ContentView: View {
         AddNewTaskView { newTask in
           tasksStore.add(newTask)
         }
+      }
+      .navigationDestination(for: Task.self) { task in
+        TaskDetailView(task: task)
       }
     }
   }

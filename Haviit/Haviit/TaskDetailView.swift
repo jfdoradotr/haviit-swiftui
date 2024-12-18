@@ -10,6 +10,10 @@ struct TaskDetailView: View {
   @State private var name: String
   @State private var description: String
 
+  private var isCompletedToday: Bool {
+    task.sortedLog.last?.formatted(date: .long, time: .omitted) == Date().formatted(date: .long, time: .omitted)
+  }
+
   init(task: Task) {
     self.task = task
     _name = .init(initialValue: task.name)
@@ -17,7 +21,7 @@ struct TaskDetailView: View {
   }
 
   var body: some View {
-    Form {
+    List {
       // Description Section
       Section(header: Text("Task Details").font(.headline)) {
         Text(task.description)
@@ -41,42 +45,53 @@ struct TaskDetailView: View {
 
       // Action Buttons Section
       Section {
-        VStack(spacing: 20.0) {
-          Button(action: {
-            // Implement Mark as Completed functionality
-          }) {
-            Text("Mark as Completed")
-              .frame(maxWidth: .infinity)
-              .padding()
-              .background(Color.green)
-              .foregroundColor(.white)
-              .cornerRadius(8)
-          }
-
-          Button(action: {
-            // Implement Edit functionality (perhaps a new view/modal for editing)
-          }) {
-            Text("Edit")
-              .frame(maxWidth: .infinity)
-              .padding()
-              .background(Color.gray.opacity(0.2))
-              .foregroundColor(.primary)
-              .cornerRadius(8)
-          }
-
-          Button(action: {
-            // Implement Delete functionality
-          }) {
-            Text("Delete")
-              .frame(maxWidth: .infinity)
-              .padding()
-              .background(Color.red)
-              .foregroundColor(.white)
-              .cornerRadius(8)
-          }
+        Button(action: {
+          print("Mark as completed/uncompleted")
+        }) {
+          Text(isCompletedToday ? "Unmark as Completed" : "Mark as Completed")
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .cornerRadius(8)
         }
+        .buttonStyle(.bordered)
+        .tint((isCompletedToday ? Color.brown : Color.green))
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
+
+        Button(action: {
+          print("Edit")
+        }) {
+          HStack {
+            Image(systemName: "pencil")
+            Text("Edit")
+          }
+          .frame(maxWidth: .infinity)
+          .frame(height: 50)
+          .cornerRadius(8)
+        }
+        .tint(.primary)
+        .buttonStyle(.bordered)
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
+
+        Button(action: {
+          print("Delete")
+        }) {
+          HStack {
+            Image(systemName: "trash")
+            Text("Delete")
+          }
+          .frame(maxWidth: .infinity)
+          .frame(height: 50)
+          .cornerRadius(8)
+        }
+        .buttonStyle(.bordered)
+        .tint(.red)
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
       }
     }
+    .buttonStyle(.borderless)
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle(task.name)
   }
