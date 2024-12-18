@@ -48,7 +48,10 @@ struct TaskDetailView: View {
         Button(action: {
           print("Mark as completed/uncompleted")
         }) {
-          Text(isCompletedToday ? "Unmark as Completed" : "Mark as Completed")
+          HStack {
+            Image(systemName: isCompletedToday ? "checkmark.circle" : "checkmark.circle.fill")
+            Text(isCompletedToday ? "Unmark as Completed" : "Mark as Completed")
+          }
             .frame(maxWidth: .infinity)
             .frame(height: 50)
             .cornerRadius(8)
