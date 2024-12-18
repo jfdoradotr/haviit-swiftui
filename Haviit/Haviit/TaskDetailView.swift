@@ -5,7 +5,7 @@
 import SwiftUI
 
 struct TaskDetailView: View {
-  var task: Task
+  let task: Task
 
   @State private var name: String
   @State private var description: String
