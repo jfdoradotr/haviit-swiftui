@@ -68,6 +68,24 @@ struct TaskDetailView: View {
         .listRowSeparator(.hidden)
 
         Button(action: {
+          withAnimation {
+            // edit task
+          }
+        }) {
+          HStack {
+            Image(systemName: "pencil")
+            Text("Edit")
+          }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .cornerRadius(8)
+        }
+        .buttonStyle(.bordered)
+        .tint(Color.gray)
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
+
+        Button(action: {
           onDelete(task)
           dismiss()
         }) {
