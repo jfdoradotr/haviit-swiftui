@@ -8,7 +8,7 @@ struct Task: Identifiable, Hashable {
   let id: UUID
   let name: String
   let description: String
-  let log: [Date]
+  var log: [Date]
 
   init(id: UUID = UUID(), name: String, description: String, log: [Date] = []) {
     self.id = id
@@ -30,6 +30,10 @@ final class TasksStore {
 
   func add(_ task: Task) {
     tasks.append(task)
+  }
+
+  func delete(_ task: Task) {
+    tasks.removeAll(where: { $0.id == task.id })
   }
 }
 
@@ -58,12 +62,10 @@ struct ContentView: View {
         AddNewTaskView(tasks: $tasksStore.tasks)
       }
       .navigationDestination(for: Task.self) { task in
-        if let index = tasksStore.tasks.firstIndex(of: task) {
-          TaskDetailView(
-            tasks: $tasksStore.tasks,
-            taskIndex: index
-          )
-        }
+        TaskDetailView(
+          task: task,
+          onDelete: { tasksStore.delete($0) }
+        )
       }
     }
   }

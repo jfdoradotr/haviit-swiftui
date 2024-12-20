@@ -7,12 +7,13 @@ import SwiftUI
 struct TaskDetailView: View {
   @Environment(\.dismiss) private var dismiss
 
-  @Binding var tasks: [Task]
+  @State var task: Task
 
-  let taskIndex: Int
+  let onDelete: (Task) -> Void
 
-  private var task: Task {
-    tasks[taskIndex]
+  init(task: Task, onDelete: @escaping (Task) -> Void) {
+    self._task = .init(initialValue: task)
+    self.onDelete = onDelete
   }
 
   private var isCompletedToday: Bool {
@@ -45,8 +46,8 @@ struct TaskDetailView: View {
       // Action Buttons Section
       Section {
         Button(action: {
-          if isCompletedToday {
-
+          withAnimation {
+            toggleTaskCompletion()
           }
         }) {
           HStack {
@@ -63,10 +64,8 @@ struct TaskDetailView: View {
         .listRowSeparator(.hidden)
 
         Button(action: {
-          if let index = tasks.firstIndex(of: task) {
-            tasks.remove(at: index)
-            dismiss()
-          }
+          onDelete(task)
+          dismiss()
         }) {
           HStack {
             Image(systemName: "trash")
@@ -86,21 +85,27 @@ struct TaskDetailView: View {
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle(task.name)
   }
+
+  private func toggleTaskCompletion() {
+    if isCompletedToday {
+      if let index = task.sortedLog.lastIndex(of: task.log.last!) {
+        task.log.remove(at: index)
+      }
+    } else {
+      task.log.append(Date())
+    }
+  }
 }
 
 #Preview {
   NavigationStack {
     TaskDetailView(
-      tasks: .constant(
-        [
-          Task(
-            name: "Task 1",
-            description: "Nothing to add",
-            log: [Date.now, Date.now.addingTimeInterval(-86400)]
-          )
-        ]
+      task: Task(
+        name: "Task 1",
+        description: "Nothing to add",
+        log: [Date.now, Date.now.addingTimeInterval(-86400)]
       ),
-      taskIndex: 0
+      onDelete: { _ in }
     )
   }
 }
