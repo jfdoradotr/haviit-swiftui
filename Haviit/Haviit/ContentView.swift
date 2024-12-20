@@ -35,6 +35,15 @@ final class TasksStore {
   func delete(_ task: Task) {
     tasks.removeAll(where: { $0.id == task.id })
   }
+
+  func update(_ task: Task) {
+    guard let sourceTask = tasks.filter({ $0.id == task.id }).first,
+          let index = tasks.firstIndex(of: sourceTask) else {
+      print("Task doesn't exist")
+      return
+    }
+    tasks[index] = task
+  }
 }
 
 struct ContentView: View {
@@ -64,7 +73,8 @@ struct ContentView: View {
       .navigationDestination(for: Task.self) { task in
         TaskDetailView(
           task: task,
-          onDelete: { tasksStore.delete($0) }
+          onDelete: { tasksStore.delete($0) },
+          onUpdate: { tasksStore.update($0) }
         )
       }
     }

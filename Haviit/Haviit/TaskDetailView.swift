@@ -9,11 +9,13 @@ struct TaskDetailView: View {
 
   @State var task: Task
 
+  let onUpdate: (Task) -> Void
   let onDelete: (Task) -> Void
 
-  init(task: Task, onDelete: @escaping (Task) -> Void) {
+  init(task: Task, onDelete: @escaping (Task) -> Void, onUpdate: @escaping (Task) -> Void) {
     self._task = .init(initialValue: task)
     self.onDelete = onDelete
+    self.onUpdate = onUpdate
   }
 
   private var isCompletedToday: Bool {
@@ -94,6 +96,7 @@ struct TaskDetailView: View {
     } else {
       task.log.append(Date())
     }
+    onUpdate(task)
   }
 }
 
@@ -105,7 +108,8 @@ struct TaskDetailView: View {
         description: "Nothing to add",
         log: [Date.now, Date.now.addingTimeInterval(-86400)]
       ),
-      onDelete: { _ in }
+      onDelete: { _ in },
+      onUpdate: { _ in }
     )
   }
 }
