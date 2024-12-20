@@ -9,7 +9,11 @@ struct TaskDetailView: View {
 
   @Binding var tasks: [Task]
 
-  let task: Task
+  let taskIndex: Int
+
+  private var task: Task {
+    tasks[taskIndex]
+  }
 
   private var isCompletedToday: Bool {
     task.sortedLog.last?.formatted(date: .long, time: .omitted) == Date().formatted(date: .long, time: .omitted)
@@ -87,12 +91,16 @@ struct TaskDetailView: View {
 #Preview {
   NavigationStack {
     TaskDetailView(
-      tasks: .constant([]),
-      task: Task(
-        name: "Task 1",
-        description: "Nothing to add",
-        log: [Date.now, Date.now.addingTimeInterval(-86400)]
-      )
+      tasks: .constant(
+        [
+          Task(
+            name: "Task 1",
+            description: "Nothing to add",
+            log: [Date.now, Date.now.addingTimeInterval(-86400)]
+          )
+        ]
+      ),
+      taskIndex: 0
     )
   }
 }

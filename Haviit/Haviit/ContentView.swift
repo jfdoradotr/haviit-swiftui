@@ -58,7 +58,12 @@ struct ContentView: View {
         AddNewTaskView(tasks: $tasksStore.tasks)
       }
       .navigationDestination(for: Task.self) { task in
-        TaskDetailView(tasks: $tasksStore.tasks, task: task)
+        if let index = tasksStore.tasks.firstIndex(of: task) {
+          TaskDetailView(
+            tasks: $tasksStore.tasks,
+            taskIndex: index
+          )
+        }
       }
     }
   }
