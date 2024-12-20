@@ -8,9 +8,26 @@ struct AddNewTaskView: View {
   @State private var name: String = ""
   @State private var description: String = ""
 
-  @Binding var tasks: [Task]
-
   @Environment(\.dismiss) private var dismiss
+
+  let onAdd: ((Task) -> Void)?
+  let onEdit: ((Task) -> Void)?
+
+  private var isEdit: Bool {
+    onEdit != nil
+  }
+
+  init(
+    name: String = "",
+    description: String? = nil,
+    onAdd: ((Task) -> Void)? = nil,
+    onEdit: ((Task) -> Void)? = nil
+  ) {
+    self._name = .init(initialValue: name)
+    self._description = .init(initialValue: description ?? "")
+    self.onAdd = onAdd
+    self.onEdit = onEdit
+  }
 
   var body: some View {
     NavigationStack {
@@ -21,15 +38,17 @@ struct AddNewTaskView: View {
             .frame(height: 150)
         }
       }
-      .navigationTitle("Add New Task")
+      .navigationTitle(isEdit ? "Update Task" : "Add Task")
       .toolbar {
         ToolbarItem(placement: .confirmationAction) {
-          Button("Add") {
+          Button(isEdit ? "Update" : "Add") {
             let task = Task(
               name: name,
               description: description.isEmpty ? nil : description
             )
-            tasks.append(task)
+
+            let action = onEdit ?? onAdd
+            action?(task)
             dismiss()
           }
         }
@@ -45,5 +64,5 @@ struct AddNewTaskView: View {
 }
 
 #Preview {
-  AddNewTaskView(tasks: .constant([]))
+  AddNewTaskView(onAdd: { _ in }, onEdit: { _ in })
 }

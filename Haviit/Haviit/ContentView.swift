@@ -6,8 +6,8 @@ import SwiftUI
 
 struct Task: Identifiable, Hashable {
   let id: UUID
-  let name: String
-  let description: String?
+  var name: String
+  var description: String?
   var log: [Date]
 
   init(id: UUID = UUID(), name: String, description: String?, log: [Date] = []) {
@@ -68,7 +68,7 @@ struct ContentView: View {
         }
       }
       .sheet(isPresented: $addNewTask) {
-        AddNewTaskView(tasks: $tasksStore.tasks)
+        AddNewTaskView(onAdd: tasksStore.add)
       }
       .navigationDestination(for: Task.self) { task in
         TaskDetailView(

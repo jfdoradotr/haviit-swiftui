@@ -7,6 +7,7 @@ import SwiftUI
 struct TaskDetailView: View {
   @Environment(\.dismiss) private var dismiss
 
+  @State private var showEditTask = false
   @State var task: Task
 
   let onUpdate: (Task) -> Void
@@ -68,9 +69,7 @@ struct TaskDetailView: View {
         .listRowSeparator(.hidden)
 
         Button(action: {
-          withAnimation {
-            // edit task
-          }
+          showEditTask = true
         }) {
           HStack {
             Image(systemName: "pencil")
@@ -106,6 +105,17 @@ struct TaskDetailView: View {
     .buttonStyle(.borderless)
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle(task.name)
+    .sheet(isPresented: $showEditTask) {
+      AddNewTaskView(
+        name: task.name,
+        description: task.description,
+        onEdit: { task in
+          self.task.name = task.name
+          self.task.description = task.description
+          onUpdate(self.task)
+        }
+      )
+    }
   }
 
   private func toggleTaskCompletion() {
