@@ -5,7 +5,10 @@
 import SwiftUI
 
 struct TaskDetailView: View {
+  @Environment(\.dismiss) private var dismiss
+
   @Binding var tasks: [Task]
+
   let task: Task
 
   private var isCompletedToday: Bool {
@@ -56,7 +59,10 @@ struct TaskDetailView: View {
         .listRowSeparator(.hidden)
 
         Button(action: {
-          print("Delete")
+          if let index = tasks.firstIndex(of: task) {
+            tasks.remove(at: index)
+            dismiss()
+          }
         }) {
           HStack {
             Image(systemName: "trash")
