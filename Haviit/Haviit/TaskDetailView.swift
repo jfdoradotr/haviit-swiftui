@@ -5,19 +5,11 @@
 import SwiftUI
 
 struct TaskDetailView: View {
+  @Binding var tasks: [Task]
   let task: Task
-
-  @State private var name: String
-  @State private var description: String
 
   private var isCompletedToday: Bool {
     task.sortedLog.last?.formatted(date: .long, time: .omitted) == Date().formatted(date: .long, time: .omitted)
-  }
-
-  init(task: Task) {
-    self.task = task
-    _name = .init(initialValue: task.name)
-    _description = .init(initialValue: task.description)
   }
 
   var body: some View {
@@ -46,7 +38,9 @@ struct TaskDetailView: View {
       // Action Buttons Section
       Section {
         Button(action: {
-          print("Mark as completed/uncompleted")
+          if isCompletedToday {
+
+          }
         }) {
           HStack {
             Image(systemName: isCompletedToday ? "checkmark.circle" : "checkmark.circle.fill")
@@ -86,6 +80,13 @@ struct TaskDetailView: View {
 
 #Preview {
   NavigationStack {
-    TaskDetailView(task: Task(name: "Task 1", description: "Nothing to add", log: [Date.now, Date.now.addingTimeInterval(-86400)]))
+    TaskDetailView(
+      tasks: .constant([]),
+      task: Task(
+        name: "Task 1",
+        description: "Nothing to add",
+        log: [Date.now, Date.now.addingTimeInterval(-86400)]
+      )
+    )
   }
 }

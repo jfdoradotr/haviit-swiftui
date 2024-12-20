@@ -7,7 +7,8 @@ import SwiftUI
 struct AddNewTaskView: View {
   @State private var name: String = ""
   @State private var description: String = ""
-  let onAddTask: (Task) -> Void
+
+  @Binding var tasks: [Task]
 
   @Environment(\.dismiss) private var dismiss
 
@@ -23,7 +24,7 @@ struct AddNewTaskView: View {
         ToolbarItem(placement: .confirmationAction) {
           Button("Add") {
             let task = Task(name: name, description: description)
-            onAddTask(task)
+            tasks.append(task)
             dismiss()
           }
         }
@@ -39,5 +40,5 @@ struct AddNewTaskView: View {
 }
 
 #Preview {
-  AddNewTaskView(onAddTask: { _ in })
+  AddNewTaskView(tasks: .constant([]))
 }

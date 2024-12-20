@@ -22,7 +22,7 @@ struct Task: Identifiable, Hashable {
 
 @Observable
 final class TasksStore {
-  private(set) var tasks: [Task]
+  var tasks: [Task]
 
   init(tasks: [Task] = []) {
     self.tasks = tasks
@@ -55,12 +55,10 @@ struct ContentView: View {
         }
       }
       .sheet(isPresented: $addNewTask) {
-        AddNewTaskView { newTask in
-          tasksStore.add(newTask)
-        }
+        AddNewTaskView(tasks: $tasksStore.tasks)
       }
       .navigationDestination(for: Task.self) { task in
-        TaskDetailView(task: task)
+        TaskDetailView(tasks: $tasksStore.tasks, task: task)
       }
     }
   }
