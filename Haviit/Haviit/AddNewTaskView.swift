@@ -16,14 +16,19 @@ struct AddNewTaskView: View {
     NavigationStack {
       Form {
         TextField("Name", text: $name)
-        TextEditor(text: $description)
-          .frame(height: 150)
+        Section(header: Text("Description").font(.subheadline)) {
+          TextEditor(text: $description)
+            .frame(height: 150)
+        }
       }
       .navigationTitle("Add New Task")
       .toolbar {
         ToolbarItem(placement: .confirmationAction) {
           Button("Add") {
-            let task = Task(name: name, description: description)
+            let task = Task(
+              name: name,
+              description: description.isEmpty ? nil : description
+            )
             tasks.append(task)
             dismiss()
           }

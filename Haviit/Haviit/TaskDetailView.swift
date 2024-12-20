@@ -26,22 +26,24 @@ struct TaskDetailView: View {
     List {
       // Description Section
       Section(header: Text("Task Details").font(.headline)) {
-        Text(task.description)
+        Text(task.description ?? "No Description")
           .font(.body)
           .foregroundStyle(.secondary)
       }
 
       // Log Section
-      Section(header: Text("Activity Log").font(.headline)) {
-        ForEach(task.log, id: \.self) { item in
-          HStack {
-            Text(item.formatted(date: .long, time: .shortened))
-              .font(.subheadline)
-            Spacer()
-            Image(systemName: "checkmark.circle.fill")
-              .foregroundColor(.green)
+      if !task.log.isEmpty {
+        Section(header: Text("Activity Log").font(.headline)) {
+          ForEach(task.log, id: \.self) { item in
+            HStack {
+              Text(item.formatted(date: .long, time: .shortened))
+                .font(.subheadline)
+              Spacer()
+              Image(systemName: "checkmark.circle.fill")
+                .foregroundColor(.green)
+            }
+            .padding(.vertical, 4)
           }
-          .padding(.vertical, 4)
         }
       }
 

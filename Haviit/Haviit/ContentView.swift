@@ -7,10 +7,10 @@ import SwiftUI
 struct Task: Identifiable, Hashable {
   let id: UUID
   let name: String
-  let description: String
+  let description: String?
   var log: [Date]
 
-  init(id: UUID = UUID(), name: String, description: String, log: [Date] = []) {
+  init(id: UUID = UUID(), name: String, description: String?, log: [Date] = []) {
     self.id = id
     self.name = name
     self.description = description
