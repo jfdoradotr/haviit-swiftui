@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-struct Task: Identifiable, Hashable {
+struct Task: Identifiable, Hashable, Codable {
   let id: UUID
   var name: String
   var description: String?
@@ -24,16 +24,18 @@ struct Task: Identifiable, Hashable {
 final class TasksStore {
   var tasks: [Task]
 
-  init(tasks: [Task] = []) {
-    self.tasks = tasks
+  init() {
+    self.tasks = TasksStore.load()
   }
 
   func add(_ task: Task) {
     tasks.append(task)
+    save()
   }
 
   func delete(_ task: Task) {
     tasks.removeAll(where: { $0.id == task.id })
+    save()
   }
 
   func update(_ task: Task) {
@@ -43,6 +45,28 @@ final class TasksStore {
       return
     }
     tasks[index] = task
+    save()
+  }
+
+  private func save() {
+    let userDefaults = UserDefaults.standard
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.prettyPrinted]
+    
+    do {
+      let data = try encoder.encode(tasks)
+      userDefaults.set(data, forKey: "tasks")
+    } catch {
+      print("Error saving tasks: \(error)")
+    }
+  }
+
+  private static func load() -> [Task] {
+    let userDefaults = UserDefaults.standard
+    let decoder = JSONDecoder()
+
+    guard let data = userDefaults.data(forKey: "tasks"), let tasks = try? decoder.decode([Task].self, from: data) else { return [] }
+    return tasks
   }
 }
 
